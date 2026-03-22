@@ -1,7 +1,8 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins "http://localhost:4200",   # Angular dev server
-            "http://localhost:4201"    # Angular production preview
+            "http://localhost:4201",   # Angular production preview
+            /\Ahttps:\/\/.*\.vercel\.app\z/ # Vercel deployments
 
     resource "*",
       headers: :any,
