@@ -42,8 +42,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://github.com/natashapl/personal-finance)
-- Live Site URL: [Add live site URL here](https://personal-finance-natashasworld.vercel.app)
+- Solution URL: [https://github.com/natashapl/personal-finance](https://github.com/natashapl/personal-finance)
+- Live Site URL: [https://personal-finance-natashasworld.vercel.app](https://personal-finance-natashasworld.vercel.app)
 
 ## My process
 
