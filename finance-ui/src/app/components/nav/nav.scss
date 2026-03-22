@@ -1,0 +1,210 @@
+.sidebar {
+  width: 300px;
+  min-width: 300px;
+  background: var(--color-grey-900);
+  min-height: 100vh;
+  border-radius: 0 16px 16px 0;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: width 0.25s ease, min-width 0.25s ease;
+
+  &--minimized {
+    width: 100px;
+    min-width: 100px;
+
+    .sidebar__links { padding: 0; }
+
+    .sidebar__link {
+      justify-content: center;
+      padding: 16px 0;
+
+      &.active {
+        img { 
+          filter: brightness(0) saturate(100%) invert(8%) sepia(6%) saturate(1392%) hue-rotate(211deg) brightness(91%) contrast(88%); 
+        }
+
+        &:hover {
+          img {
+            filter: brightness(0) saturate(100%) invert(8%) sepia(6%) saturate(1392%) hue-rotate(211deg) brightness(91%) contrast(88%); 
+          }
+        }        
+      }
+
+      img { filter: brightness(1); }
+
+      &:hover img { filter: brightness(5); }
+    }
+
+    .sidebar__bottom { padding: 12px 0; }
+    .sidebar__minimize { justify-content: center; padding: 16px 0; }
+  }
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+}
+
+.sidebar__logo {
+  padding: 40px 32px 24px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar__links {
+  list-style: none;
+  padding: 0 0 0 0;
+  margin: 0;
+  flex: 1;
+
+  li { margin: 0; }
+}
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 32px;
+  color: var(--color-grey-300);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  border-radius: 0 12px 12px 0;
+  margin-right: 24px;
+  transition: background 0.2s, color 0.2s;
+  border-left: 5px solid transparent;
+  white-space: nowrap;
+
+  img { flex-shrink: 0; filter: brightness(1); }
+
+  &:hover {
+    color: var(--color-white);
+    img { filter: brightness(5); }
+  }
+
+  &.active {
+    background: var(--color-beige-100);
+    color: var(--color-grey-900);
+    border-left-color: var(--color-green);
+
+    img { 
+      filter: brightness(0) saturate(100%) invert(40%) sepia(13%) saturate(2031%) hue-rotate(128deg) brightness(97%) contrast(86%); 
+    }
+  }
+}
+
+.sidebar__bottom {
+  padding: 0 0 24px;
+  margin-top: auto;
+}
+
+.sidebar__demo-badge {
+  margin: 0 24px 8px;
+  padding: 6px 12px;
+  background: rgba(255, 199, 0, 0.15);
+  border: 1px solid rgba(255, 199, 0, 0.4);
+  border-radius: 8px;
+  color: #ffc700;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
+
+  &--minimized {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ffc700;
+    border: none;
+    margin: 0 auto 8px;
+    padding: 0;
+  }
+}
+
+.sidebar__minimize {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 32px;
+  color: var(--color-grey-300);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+  transition: color 0.2s;
+
+  img { flex-shrink: 0; filter: brightness(1); }
+
+  &:hover {
+    color: var(--color-white);
+    img { filter: brightness(5); }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-green);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+// Mobile bottom nav
+.mobile-nav {
+  display: none;
+
+  @media (max-width: 1024px) {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-grey-900);
+    border-radius: 8px 8px 0 0;
+    z-index: 100;
+    padding: 8px 16px 0;
+    justify-content: space-around;
+  }
+}
+
+.mobile-nav__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px 12px;
+  border-radius: 8px 8px 0 0;
+  transition: background 0.2s;
+  border-bottom: 3px solid transparent;
+
+  img { filter: brightness(1); }
+
+  span {
+    color: var(--color-grey-300);
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 768px) {
+    span {
+      display: none;
+    }
+  }
+
+  &.active {
+    background: var(--color-beige-100);
+    border-bottom: 5px solid var(--color-green);
+
+    img { 
+      filter: brightness(0) saturate(100%) invert(40%) sepia(13%) saturate(2031%) hue-rotate(128deg) brightness(97%) contrast(86%); 
+    }
+
+    span { color: var(--color-grey-900); }
+  }
+}

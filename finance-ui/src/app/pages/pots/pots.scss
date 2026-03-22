@@ -1,0 +1,171 @@
+.pots {
+  max-width: 1200px;
+}
+
+.form-input--error {
+  border-color: var(--color-red) !important;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+// ─── Grid ────────────────────────────────────────────────────────────────────
+.pots-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+}
+
+// ─── Pot card ────────────────────────────────────────────────────────────────
+.pot-card {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    h2 { font-size: 1.25rem; }
+  }
+
+  &__menu-wrapper { position: relative; }
+
+  &__amounts {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 16px;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    color: var(--color-grey-500);
+  }
+
+  &__saved {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  &__progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    margin-bottom: 32px;
+  }
+
+  &__percent {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-grey-500);
+  }
+
+  &__target {
+    font-size: 0.75rem;
+    color: var(--color-grey-500);
+  }
+
+  &__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+.color-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pot-progress {
+  height: 8px;
+  background: var(--color-beige-100);
+}
+
+// ─── Ellipsis dropdown ───────────────────────────────────────────────────────
+.ellipsis-btn {
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.15s;
+
+  &:hover { background: var(--color-grey-100); }
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  background: var(--color-white);
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  min-width: 160px;
+  z-index: 10;
+  overflow: hidden;
+  padding: 4px 0;
+
+  &__item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 12px 20px;
+    font-size: 0.875rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-grey-900);
+    transition: background 0.15s;
+
+    &:hover { background: var(--color-beige-100); }
+
+    &--danger {
+      color: var(--color-red);
+      &:hover { background: rgba(201, 71, 54, 0.06); }
+    }
+  }
+}
+
+// ─── Money progress preview ──────────────────────────────────────────────────
+.money-progress {
+  background: var(--color-beige-100);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+
+  .progress-track {
+    position: relative;
+    margin: 12px 0;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  &__label { font-size: 0.875rem; color: var(--color-grey-500); }
+  &__value { font-size: 2rem; font-weight: 700; }
+  &__percent { font-size: 0.75rem; font-weight: 700; color: var(--color-grey-500); }
+  &__target { font-size: 0.75rem; color: var(--color-grey-500); }
+}
+
+.progress-fill--preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 4px;
+}

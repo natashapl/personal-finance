@@ -1,0 +1,294 @@
+<div class="transactions" [attr.aria-busy]="loading()">
+  <div class="page-header">
+    <h1>Transactions</h1>
+    <button class="btn btn--primary" (click)="openAdd()">+ New Transaction</button>
+  </div>
+
+  <div class="card">
+    <!-- Controls -->
+    <div class="controls">
+      <div class="search-wrapper">
+        <input
+          class="form-input search-input"
+          type="search"
+          placeholder="Search transaction"
+          [value]="search()"
+          (input)="search.set($any($event.target).value); onSearch()"
+          aria-label="Search transactions"
+        />
+        <img class="search-icon" ngSrc="/assets/icons/icon-search.svg" width="16" height="16" alt="" />
+      </div>
+
+      <div class="filters">
+        <label class="filter-label" for="sort-select">
+          Sort by
+          <div class="select-wrapper">
+            <select
+              id="sort-select"
+              class="form-input form-select"
+              [value]="sort()"
+              (change)="sort.set($any($event.target).value); onFilterChange()"
+            >
+              @for (s of sortOptions; track s.value) {
+                <option [value]="s.value">{{ s.label }}</option>
+              }
+            </select>
+          </div>
+        </label>
+
+        <label class="filter-label" for="category-select">
+          Category
+          <div class="select-wrapper">
+            <select
+              id="category-select"
+              class="form-input form-select"
+              [value]="category()"
+              (change)="category.set($any($event.target).value); onFilterChange()"
+            >
+              @for (c of categories; track c) {
+                <option [value]="c === 'All Transactions' ? '' : c">{{ c }}</option>
+              }
+            </select>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Table header -->
+    <div class="table-header" role="row" aria-hidden="true">
+      <span>Recipient / Sender</span>
+      <span>Category</span>
+      <span>Transaction Date</span>
+      <span class="text-right">Amount</span>
+      <span></span>
+    </div>
+
+    @if (loading()) {
+      <div class="loading-state">Loading…</div>
+    } @else if (transactions().length === 0) {
+      <div class="empty-state">No transactions found.</div>
+    } @else {
+      <ul class="txn-list" role="list">
+        @for (t of transactions(); track t.id) {
+          <li class="txn-row">
+            <div class="txn-row__recipient">
+              <span class="txn-row__name">{{ t.name }}</span>
+            </div>
+            <span class="txn-row__category">{{ t.category }}</span>
+            <span class="txn-row__date">{{ formatDate(t.date) }}</span>
+            <span
+              class="txn-row__amount"
+              [class.amount--positive]="t.amount > 0"
+              [class.amount--negative]="t.amount < 0"
+            >
+              {{ t.amount > 0 ? '+' : '-' }}{{ formatCurrency(t.amount) }}
+            </span>
+            <div class="txn-row__menu-wrapper">
+              <button
+                class="btn-icon ellipsis-btn"
+                (click)="toggleMenu(t.id)"
+                [attr.aria-expanded]="activeMenuId() === t.id"
+                [attr.aria-label]="'Options for ' + t.name"
+              >
+                <img ngSrc="/assets/icons/icon-ellipsis.svg" width="14" height="4" alt="" />
+              </button>
+              @if (activeMenuId() === t.id) {
+                <div class="dropdown-menu" role="menu">
+                  <button class="dropdown-menu__item dropdown-menu__item--danger" role="menuitem" (click)="openDeleteTxn(t)">Delete Transaction</button>
+                </div>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+
+      <!-- Pagination -->
+      @if (totalPages() > 1) {
+        <nav class="pagination" aria-label="Transaction pages">
+          <button
+            class="pagination__btn pagination__btn--prev"
+            (click)="goToPage(currentPage() - 1)"
+            [disabled]="currentPage() === 1"
+            aria-label="Previous page"
+          >
+            <img ngSrc="/assets/icons/icon-caret-left.svg" width="6" height="11" alt="" />
+            Prev
+          </button>
+
+          <div class="pagination__pages">
+            @for (page of getPageNumbers(); track page) {
+              <button
+                class="pagination__page"
+                [class.active]="page === currentPage()"
+                (click)="goToPage(page)"
+                [attr.aria-current]="page === currentPage() ? 'page' : null"
+                [attr.aria-label]="'Page ' + page"
+              >
+                {{ page }}
+              </button>
+            }
+          </div>
+
+          <button
+            class="pagination__btn pagination__btn--next"
+            (click)="goToPage(currentPage() + 1)"
+            [disabled]="currentPage() === totalPages()"
+            aria-label="Next page"
+          >
+            Next
+            <img ngSrc="/assets/icons/icon-caret-right.svg" width="6" height="11" alt="" />
+          </button>
+        </nav>
+      }
+    }
+  </div>
+</div>
+
+<!-- New Transaction modal -->
+@if (showForm()) {
+  <div class="modal-overlay" role="dialog" aria-label="Add New Transaction" aria-modal="true">
+    <div class="modal" appFocusTrap>
+      <div class="modal__header">
+        <h2>New Transaction</h2>
+        <button class="modal__close" (click)="closeForm()" aria-label="Close">
+          <img ngSrc="/assets/icons/icon-close-modal.svg" width="20" height="20" alt="" />
+        </button>
+      </div>
+      <p class="modal__description">Record an income or expense transaction.</p>
+
+      <!-- Transaction type -->
+      <div class="form-group">
+        <span class="form-label">Transaction Type</span>
+        <div class="type-cards">
+          <button
+            class="type-card"
+            [class.type-card--active]="form().type === 'income'"
+            (click)="form.update(f => ({ ...f, type: 'income' }))"
+            type="button"
+            [attr.aria-pressed]="form().type === 'income'"
+          >
+            <span class="type-card__icon type-card__icon--income">+</span>
+            <span class="type-card__label">Income</span>
+          </button>
+          <button
+            class="type-card"
+            [class.type-card--active]="form().type === 'expense'"
+            (click)="form.update(f => ({ ...f, type: 'expense' }))"
+            type="button"
+            [attr.aria-pressed]="form().type === 'expense'"
+          >
+            <span class="type-card__icon type-card__icon--expense">−</span>
+            <span class="type-card__label">Expense</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Counterparty name -->
+      <div class="form-group">
+        <label class="form-label" for="txn-name">
+          {{ form().type === 'income' ? 'Sender' : 'Recipient' }}
+        </label>
+        <input
+          id="txn-name"
+          class="form-input"
+          [class.form-input--error]="formTouched() && formErrors().name"
+          type="text"
+          placeholder="e.g. Freelance Client"
+          maxlength="30"
+          [value]="form().name"
+          (input)="form.update(f => ({ ...f, name: $any($event.target).value }))"
+        />
+        <span class="form-hint">{{ form().name.length }}/30 characters</span>
+        @if (formTouched() && formErrors().name) {
+          <span class="form-error" role="alert">{{ formErrors().name }}</span>
+        }
+      </div>
+
+      <!-- Amount -->
+      <div class="form-group">
+        <label class="form-label" for="txn-amount">Amount</label>
+        <div class="input-wrapper">
+          <span class="input-prefix">$</span>
+          <input
+            id="txn-amount"
+            class="form-input"
+            [class.form-input--error]="formTouched() && formErrors().amount"
+            style="padding-left: 28px"
+            type="number"
+            min="0"
+            step="0.01"
+            [value]="form().amount"
+            (input)="form.update(f => ({ ...f, amount: +$any($event.target).value }))"
+          />
+        </div>
+        @if (formTouched() && formErrors().amount) {
+          <span class="form-error" role="alert">{{ formErrors().amount }}</span>
+        }
+      </div>
+
+      <!-- Category -->
+      <div class="form-group">
+        <label class="form-label" for="txn-category">Category</label>
+        <select
+          id="txn-category"
+          class="form-input form-select"
+          (change)="form.update(f => ({ ...f, category: $any($event.target).value }))"
+        >
+          @for (c of formCategories; track c) {
+            <option [value]="c" [selected]="c === form().category">{{ c }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Recurring -->
+      <div class="form-group">
+        <label class="recurring-label">
+          <input
+            type="checkbox"
+            class="recurring-checkbox"
+            [checked]="form().recurring"
+            (change)="form.update(f => ({ ...f, recurring: $any($event.target).checked }))"
+          />
+          <span>Is this a recurring bill?</span>
+        </label>
+      </div>
+
+      <div class="modal__actions">
+        @if (auth.isDemo()) {
+          <p class="demo-notice">Demo account is view-only. <a routerLink="/signup" (click)="closeForm()">Create a free account</a> to manage your finances.</p>
+        }
+        <button
+          class="btn btn--primary btn--full"
+          (click)="save()"
+          [disabled]="auth.isDemo() || saving()"
+        >
+          {{ saving() ? 'Saving…' : 'Add Transaction' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Delete confirm modal -->
+@if (showDeleteConfirm()) {
+  <div class="modal-overlay" role="alertdialog" aria-label="Confirm delete transaction" aria-modal="true">
+    <div class="modal" appFocusTrap>
+      <div class="modal__header">
+        <h2>Delete '{{ deletingName() }}'?</h2>
+        <button class="modal__close" (click)="showDeleteConfirm.set(false)" aria-label="Close">
+          <img ngSrc="/assets/icons/icon-close-modal.svg" width="20" height="20" alt="" />
+        </button>
+      </div>
+      <p class="modal__description">
+        Are you sure you want to delete this transaction? This action cannot be reversed, and all the data inside it will be removed forever.
+      </p>
+      <div class="modal__actions">
+        @if (auth.isDemo()) {
+          <p class="demo-notice">Demo account is view-only. <a routerLink="/signup" (click)="showDeleteConfirm.set(false)">Create a free account</a> to manage your finances.</p>
+        }
+        <button class="btn btn--danger btn--full" (click)="doDeleteTxn()" [disabled]="auth.isDemo()">Yes, Confirm Deletion</button>
+        <button class="btn btn--secondary btn--full" (click)="showDeleteConfirm.set(false)">No, Go Back</button>
+      </div>
+    </div>
+  </div>
+}

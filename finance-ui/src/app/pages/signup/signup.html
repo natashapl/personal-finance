@@ -1,0 +1,99 @@
+<div class="auth-layout">
+  <!-- Left panel -->
+  <div class="auth-layout__panel" aria-hidden="true">
+    <div class="auth-layout__panel-logo">
+      <img ngSrc="/assets/icons/logo-large.svg" width="122" height="22" alt="finance" priority />
+    </div>
+    <img
+      class="auth-layout__illustration"
+      ngSrc="/assets/icons/illustration-authentication.svg"
+      width="480"
+      height="400"
+      alt=""
+    />
+    <div class="auth-layout__panel-text">
+      <h2>Keep track of your money and save for your future</h2>
+      <p>Personal finance app puts you in control of your spending. Track transactions, set budgets, and add to savings pots easily.</p>
+    </div>
+  </div>
+
+  <!-- Right panel -->
+  <main class="auth-layout__form-panel">
+    <div class="auth-card">
+      <h1 class="auth-card__title">Sign Up</h1>
+
+      @if (error()) {
+        <p class="auth-card__error" role="alert">{{ error() }}</p>
+      }
+
+      <form (ngSubmit)="onSubmit()" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="name">Name</label>
+          <input
+            id="name"
+            class="form-input"
+            type="text"
+            autocomplete="name"
+            [value]="name()"
+            (input)="name.set($any($event.target).value)"
+            [disabled]="loading()"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input
+            id="email"
+            class="form-input"
+            type="email"
+            autocomplete="email"
+            [value]="email()"
+            (input)="email.set($any($event.target).value)"
+            [disabled]="loading()"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Create Password</label>
+          <div class="input-wrapper">
+            <input
+              id="password"
+              class="form-input"
+              [type]="showPassword() ? 'text' : 'password'"
+              autocomplete="new-password"
+              [value]="password()"
+              (input)="password.set($any($event.target).value)"
+              [disabled]="loading()"
+              required
+            />
+            <button
+              type="button"
+              class="input-toggle"
+              (click)="showPassword.set(!showPassword())"
+              [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+            >
+              <img
+                [ngSrc]="showPassword() ? '/assets/icons/icon-hide-password.svg' : '/assets/icons/icon-show-password.svg'"
+                width="16"
+                height="16"
+                alt=""
+              />
+            </button>
+          </div>
+          <span class="form-hint">Passwords must be at least 8 characters</span>
+        </div>
+
+        <button class="btn-auth btn-auth--primary" type="submit" [disabled]="loading()">
+          {{ loading() ? 'Creating account…' : 'Create Account' }}
+        </button>
+      </form>
+
+      <p class="auth-card__footer">
+        Already have an account?
+        <a routerLink="/login" class="auth-card__link">Login</a>
+      </p>
+    </div>
+  </main>
+</div>

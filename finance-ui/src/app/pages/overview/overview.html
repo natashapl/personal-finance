@@ -1,0 +1,163 @@
+@if (loading()) {
+  <div class="loading-state">Loading…</div>
+} @else if (error()) {
+  <div class="loading-state" style="color: var(--color-red)">Failed to load. Is the Rails server running?</div>
+} @else if (data(); as d) {
+  <div class="overview">
+    <h1 class="overview__title">Overview</h1>
+
+    <!-- Balance cards -->
+    <section class="balance-cards" aria-label="Account summary">
+      <div class="balance-card balance-card--dark">
+        <p class="balance-card__label">Current Balance</p>
+        <p class="balance-card__amount">{{ formatCurrency(d.balance.current) }}</p>
+      </div>
+      <div class="balance-card">
+        <p class="balance-card__label">Income</p>
+        <p class="balance-card__amount">{{ formatCurrency(d.balance.income) }}</p>
+      </div>
+      <div class="balance-card">
+        <p class="balance-card__label">Expenses</p>
+        <p class="balance-card__amount">{{ formatCurrency(d.balance.expenses) }}</p>
+      </div>
+    </section>
+
+    <!-- Main grid -->
+    <div class="overview-grid">
+
+      <!-- Left column -->
+      <div class="overview-grid__left">
+
+        <!-- Pots -->
+        <section class="card overview-panel" aria-label="Savings pots">
+          <div class="panel-header">
+            <h2>Pots</h2>
+            <a routerLink="/pots" class="see-all-link">
+              See Details
+              <img ngSrc="/assets/icons/icon-caret-right.svg" width="6" height="11" alt="" />
+            </a>
+          </div>
+          <div class="pots-summary">
+            <div class="pots-summary__total-box">
+              <img ngSrc="/assets/icons/icon-pot.svg" width="40" height="48" alt="" />
+              <div>
+                <p class="pots-summary__label">Total Saved</p>
+                <p class="pots-summary__amount">{{ formatCurrency(d.pots.total_saved) }}</p>
+              </div>
+            </div>
+            <ul class="pots-summary__list">
+              @for (pot of d.pots.pots; track pot.id) {
+                <li class="pots-summary__item">
+                  <span class="pots-summary__bar" [style.background]="pot.theme_color"></span>
+                  <span class="pots-summary__name">{{ pot.name }}</span>
+                  <span class="pots-summary__value">{{ formatCurrency(pot.saved_amount) }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        </section>
+
+        <!-- Transactions -->
+        <section class="card overview-panel" aria-label="Latest transactions">
+          <div class="panel-header">
+            <h2>Transactions</h2>
+            <a routerLink="/transactions" class="see-all-link">
+              View All
+              <img ngSrc="/assets/icons/icon-caret-right.svg" width="6" height="11" alt="" />
+            </a>
+          </div>
+          <ul class="txn-list">
+            @for (t of d.latest_transactions; track t.id) {
+              <li class="txn-item">
+                <div class="txn-item__info">
+                  <span class="txn-item__name">{{ t.name }}</span>
+                  <span class="txn-item__date">{{ formatDate(t.date) }}</span>
+                </div>
+                <span
+                  class="txn-item__amount"
+                  [class.amount--positive]="t.amount > 0"
+                  [class.amount--negative]="t.amount < 0"
+                >
+                  {{ t.amount > 0 ? '+' : '' }}{{ formatCurrency(t.amount) }}
+                </span>
+              </li>
+            }
+          </ul>
+        </section>
+
+      </div>
+
+      <!-- Right column -->
+      <div class="overview-grid__right">
+
+        <!-- Budgets with donut chart -->
+        <section class="card overview-panel" aria-label="Budget summary">
+          <div class="panel-header">
+            <h2>Budgets</h2>
+            <a routerLink="/budgets" class="see-all-link">
+              See Details
+              <img ngSrc="/assets/icons/icon-caret-right.svg" width="6" height="11" alt="" />
+            </a>
+          </div>
+          <div class="budgets-summary">
+            <!-- Donut chart -->
+            <div class="donut-chart" role="img" [attr.aria-label]="'Spent ' + formatCurrency(budgetSpent()) + ' of ' + formatCurrency(budgetTotal()) + ' limit'">
+              <svg viewBox="0 0 100 100" aria-hidden="true">
+                <circle cx="50" cy="50" r="35.5" fill="none" stroke="var(--color-beige-100)" stroke-width="17" />
+                @for (seg of limitSegments(); track $index) {
+                  <path [attr.d]="seg.path" [attr.fill]="seg.color" />
+                }
+                <g opacity="0.6">
+                  @for (seg of spentSegments(); track $index) {
+                    <path [attr.d]="seg.path" [attr.fill]="seg.color" />
+                  }
+                </g>
+              </svg>
+              <div class="donut-chart__center">
+                <span class="donut-chart__amount">{{ formatCurrency(budgetSpent()) }}</span>
+                <span class="donut-chart__label">of {{ formatCurrency(budgetTotal()) }} limit</span>
+              </div>
+            </div>
+
+            <!-- Budget legend -->
+            <ul class="budget-legend">
+              @for (b of d.budgets; track b.id) {
+                <li class="budget-legend__item">
+                  <span class="budget-legend__bar" [style.background]="b.theme_color"></span>
+                  <span class="budget-legend__name">{{ b.category }}</span>
+                  <span class="budget-legend__amount">{{ formatCurrency(b.max_amount) }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        </section>
+
+        <!-- Recurring bills -->
+        <section class="card overview-panel" aria-label="Recurring bills">
+          <div class="panel-header">
+            <h2>Recurring Bills</h2>
+            <a routerLink="/recurring-bills" class="see-all-link">
+              See Details
+              <img ngSrc="/assets/icons/icon-caret-right.svg" width="6" height="11" alt="" />
+            </a>
+          </div>
+          <ul class="bills-summary">
+            <li class="bills-summary__item bills-summary__item--paid">
+              <span class="bills-summary__label">Paid Bills</span>
+              <span class="bills-summary__amount">{{ formatCurrency(d.recurring_bills.paid) }}</span>
+            </li>
+            <li class="bills-summary__item bills-summary__item--upcoming">
+              <span class="bills-summary__label">Total Upcoming</span>
+              <span class="bills-summary__amount">{{ formatCurrency(d.recurring_bills.upcoming) }}</span>
+            </li>
+            <li class="bills-summary__item bills-summary__item--due-soon">
+              <span class="bills-summary__label">Due Soon</span>
+              <span class="bills-summary__amount">{{ formatCurrency(d.recurring_bills.due_soon) }}</span>
+            </li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,257 @@
+.recurring {
+  max-width: 1200px;
+
+  h1 { margin-bottom: 32px; }
+}
+
+// ─── Layout ──────────────────────────────────────────────────────────────────
+.recurring-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Sidebar cards ───────────────────────────────────────────────────────────
+.recurring-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @media (max-width: 1024px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.bills-total-card {
+  background: var(--color-grey-900) !important;
+  color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+
+  &__label {
+    font-size: 0.875rem;
+    color: var(--color-grey-300);
+  }
+
+  &__amount {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+}
+
+.bills-summary-card {
+  flex: 1;
+
+  h2 { margin-bottom: 20px; }
+}
+
+.bills-summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--color-grey-100);
+    font-size: 0.875rem;
+
+    &:last-child { border-bottom: none; }
+
+    &--due-soon .bills-summary-list__value { color: var(--color-red); }
+  }
+
+  &__label { color: var(--color-grey-500); }
+
+  &__value { font-weight: 700; }
+}
+
+// ─── Table panel ─────────────────────────────────────────────────────────────
+.recurring-table-panel {
+  min-height: 200px;
+}
+
+// ─── Controls ────────────────────────────────────────────────────────────────
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  max-width: 320px;
+  min-width: 180px;
+}
+
+.search-input { padding-right: 44px; }
+
+.search-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--color-grey-500);
+  white-space: nowrap;
+}
+
+.select-wrapper select {
+  min-width: 120px;
+  padding: 8px 36px 8px 12px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+// ─── Table header ────────────────────────────────────────────────────────────
+.table-header {
+  display: grid;
+  grid-template-columns: 7fr 2fr 1fr 32px;
+  gap: 16px;
+  padding: 12px 16px;
+  font-size: 0.75rem;
+  color: var(--color-grey-500);
+  border-bottom: 1px solid var(--color-grey-100);
+
+  @media (max-width: 500px) { display: none; }
+}
+
+.text-right { text-align: right; }
+
+// ─── Bill rows ───────────────────────────────────────────────────────────────
+.bills-list { display: flex; flex-direction: column; }
+
+.bill-row {
+  display: grid;
+  grid-template-columns: 7fr 2fr 1fr 32px;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--color-grey-100);
+  transition: background 0.15s;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: var(--color-beige-100); border-radius: 8px; }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 100px;
+  }
+
+  &__name {
+    font-size: 0.875rem;
+    font-weight: 700;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__status-icon {
+    flex-shrink: 0;
+  }
+
+  &__due,
+  &__amount {
+    display: flex;
+  }
+
+  &__due {
+    font-size: 0.75rem;
+    color: var(--color-grey-500);
+    white-space: nowrap;
+
+    &--due-soon { color: var(--color-red); }
+    
+    span {
+      margin-right: 8px;
+    }
+
+    span,
+    img {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+
+  &__amount {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &__menu-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &--paid .bill-row__name { color: var(--color-green); }
+  &--due-soon .bill-row__amount { color: var(--color-red); }
+}
+
+// ─── Ellipsis dropdown ───────────────────────────────────────────────────────
+.ellipsis-btn {
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.15s;
+
+  &:hover { background: var(--color-grey-100); }
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  background: var(--color-white);
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  min-width: 160px;
+  z-index: 10;
+  overflow: hidden;
+  padding: 4px 0;
+
+  &__item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 12px 20px;
+    font-size: 0.875rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-grey-900);
+    transition: background 0.15s;
+
+    &:hover { background: var(--color-beige-100); }
+    &--danger { color: var(--color-red); }
+  }
+}

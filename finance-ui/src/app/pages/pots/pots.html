@@ -1,0 +1,251 @@
+<div class="pots" [attr.aria-busy]="loading()">
+  <div class="page-header">
+    <h1>Pots</h1>
+    <button class="btn btn--primary" (click)="openAdd()">+ Add New Pot</button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">Loading…</div>
+  } @else if (pots().length === 0) {
+    <div class="empty-state card">No pots yet. Create one to start saving!</div>
+  } @else {
+    <div class="pots-grid">
+      @for (p of pots(); track p.id) {
+        <div class="card pot-card">
+          <div class="pot-card__header">
+            <div class="pot-card__title">
+              <span class="color-dot" [style.background]="p.theme_color"></span>
+              <h2>{{ p.name }}</h2>
+            </div>
+            <div class="pot-card__menu-wrapper">
+              <button
+                class="btn-icon ellipsis-btn"
+                (click)="toggleMenu(p.id)"
+                [attr.aria-expanded]="activeMenuId() === p.id"
+                [attr.aria-label]="'Options for ' + p.name"
+              >
+                <img ngSrc="/assets/icons/icon-ellipsis.svg" width="14" height="4" alt="" />
+              </button>
+              @if (activeMenuId() === p.id) {
+                <div class="dropdown-menu" role="menu">
+                  <button class="dropdown-menu__item" role="menuitem" (click)="openEdit(p)">Edit Pot</button>
+                  <hr class="divider" />
+                  <button class="dropdown-menu__item dropdown-menu__item--danger" role="menuitem" (click)="openDelete(p)">Delete Pot</button>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="pot-card__amounts">
+            <span class="pot-card__label">Total Saved</span>
+            <span class="pot-card__saved">{{ formatCurrency(p.saved_amount) }}</span>
+          </div>
+
+          <!-- Progress bar -->
+          <div
+            class="progress-track pot-progress"
+            role="progressbar"
+            [attr.aria-valuenow]="getProgressPercent(p.saved_amount, p.target_amount).toFixed(0)"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            [attr.aria-label]="p.name + ' savings: ' + getProgressPercent(p.saved_amount, p.target_amount).toFixed(0) + '% of target'"
+          >
+            <div
+              class="progress-fill"
+              [style.width.%]="getProgressPercent(p.saved_amount, p.target_amount)"
+              [style.background]="p.theme_color"
+            ></div>
+          </div>
+
+          <div class="pot-card__progress-info">
+            <span class="pot-card__percent">{{ getProgressPercent(p.saved_amount, p.target_amount).toFixed(1) }}%</span>
+            <span class="pot-card__target">Target of {{ formatCurrency(p.target_amount) }}</span>
+          </div>
+
+          <div class="pot-card__actions">
+            <button class="btn btn--secondary btn--sm" (click)="openMoney(p, 'add')">+ Add Money</button>
+            <button class="btn btn--secondary btn--sm" (click)="openMoney(p, 'withdraw')">Withdraw</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Add / Edit Pot modal -->
+@if (activeModal() === 'add-edit') {
+  <div class="modal-overlay" role="dialog" [attr.aria-label]="editingPot() ? 'Edit Pot' : 'Add New Pot'" aria-modal="true">
+    <div class="modal" appFocusTrap>
+      <div class="modal__header">
+        <h2>{{ editingPot() ? 'Edit Pot' : 'Add New Pot' }}</h2>
+        <button class="modal__close" (click)="close()" aria-label="Close">
+          <img ngSrc="/assets/icons/icon-close-modal.svg" width="20" height="20" alt="" />
+        </button>
+      </div>
+      <p class="modal__description">
+        {{ editingPot() ? 'Update your pot details.' : 'Create a pot to set money aside for a goal.' }}
+      </p>
+
+      <div class="form-group">
+        <label class="form-label" for="pot-name">Pot Name</label>
+        <input
+          id="pot-name"
+          class="form-input"
+          type="text"
+          placeholder="e.g. Rainy Days"
+          [class.form-input--error]="formTouched() && formErrors().name"
+          [value]="form().name"
+          (input)="form.update(f => ({ ...f, name: $any($event.target).value }))"
+        />
+        @if (formTouched() && formErrors().name) {
+          <span class="form-error" role="alert">{{ formErrors().name }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="pot-target">Target Amount</label>
+        <div class="input-wrapper">
+          <span class="input-prefix">$</span>
+          <input
+            id="pot-target"
+            class="form-input"
+            [class.form-input--error]="formTouched() && formErrors().target_amount"
+            type="number"
+            min="0"
+            step="0.01"
+            [value]="form().target_amount"
+            (input)="form.update(f => ({ ...f, target_amount: +$any($event.target).value }))"
+          />
+        </div>
+        @if (formTouched() && formErrors().target_amount) {
+          <span class="form-error" role="alert">{{ formErrors().target_amount }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="pot-color">Theme Color</label>
+        <div class="color-select-wrapper">
+          <span class="color-swatch" [style.background]="form().theme_color"></span>
+          <select
+            id="pot-color"
+            class="form-input form-select"
+            style="padding-left: 44px"
+            (change)="form.update(f => ({ ...f, theme_color: $any($event.target).value }))"
+          >
+            @for (c of colors; track c.value) {
+              <option [value]="c.value" [selected]="c.value === form().theme_color">{{ c.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="modal__actions">
+        @if (auth.isDemo()) {
+          <p class="demo-notice">Demo account is view-only. <a routerLink="/signup" (click)="close()">Create a free account</a> to manage your finances.</p>
+        }
+        <button class="btn btn--primary btn--full" (click)="savePot()" [disabled]="auth.isDemo()">
+          {{ editingPot() ? 'Save Changes' : 'Add Pot' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Add / Withdraw Money modal -->
+@if (activeModal() === 'money'; as pot) {
+  @if (activePot(); as p) {
+    <div class="modal-overlay" role="dialog" [attr.aria-label]="moneyAction() === 'add' ? 'Add Money to ' + p.name : 'Withdraw from ' + p.name" aria-modal="true">
+      <div class="modal" appFocusTrap>
+        <div class="modal__header">
+          <h2>{{ moneyAction() === 'add' ? 'Add to \'' + p.name + '\'' : 'Withdraw from \'' + p.name + '\'' }}</h2>
+          <button class="modal__close" (click)="close()" aria-label="Close">
+            <img ngSrc="/assets/icons/icon-close-modal.svg" width="20" height="20" alt="" />
+          </button>
+        </div>
+        <p class="modal__description">
+          {{ moneyAction() === 'add' ? 'Add money to your pot to keep it separate from your main balance.' : 'Withdraw from your pot back to your main balance.' }}
+        </p>
+
+        <!-- Progress preview -->
+        <div class="money-progress">
+          <div class="money-progress__row">
+            <span class="money-progress__label">New Amount</span>
+            <span class="money-progress__value">{{ formatCurrency(moneyAction() === 'add' ? p.saved_amount + moneyAmount() : p.saved_amount - moneyAmount()) }}</span>
+          </div>
+          <div class="progress-track">
+            <div
+              class="progress-fill"
+              [style.width.%]="getProgressPercent(p.saved_amount, p.target_amount)"
+              [style.background]="p.theme_color"
+            ></div>
+            <div
+              class="progress-fill progress-fill--preview"
+              [style.width.%]="getNewPercent(p)"
+              [style.background]="moneyAction() === 'add' ? p.theme_color : '#C94736'"
+              style="opacity: 0.4"
+            ></div>
+          </div>
+          <div class="money-progress__row">
+            <span class="money-progress__percent">{{ getProgressPercent(p.saved_amount, p.target_amount).toFixed(1) }}%</span>
+            <span class="money-progress__target">Target of {{ formatCurrency(p.target_amount) }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="money-amount">Amount to {{ moneyAction() === 'add' ? 'Add' : 'Withdraw' }}</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">$</span>
+            <input
+              id="money-amount"
+              class="form-input"
+              [class.form-input--error]="moneyTouched() && moneyErrors().amount"
+              type="number"
+              min="0"
+              step="0.01"
+              [value]="moneyAmount()"
+              (input)="moneyAmount.set(+$any($event.target).value)"
+            />
+          </div>
+          @if (moneyTouched() && moneyErrors().amount) {
+            <span class="form-error" role="alert">{{ moneyErrors().amount }}</span>
+          }
+        </div>
+
+        <div class="modal__actions">
+          @if (auth.isDemo()) {
+            <p class="demo-notice">Demo account is view-only. <a routerLink="/signup" (click)="close()">Create a free account</a> to manage your finances.</p>
+          }
+          <button class="btn btn--primary btn--full" (click)="confirmMoney()" [disabled]="auth.isDemo()">
+            Confirm {{ moneyAction() === 'add' ? 'Addition' : 'Withdrawal' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+}
+
+<!-- Delete confirm modal -->
+@if (activeModal() === 'delete') {
+  @if (activePot(); as p) {
+    <div class="modal-overlay" role="alertdialog" aria-label="Confirm delete pot" aria-modal="true">
+      <div class="modal" appFocusTrap>
+        <div class="modal__header">
+          <h2>Delete '{{ p.name }}'?</h2>
+          <button class="modal__close" (click)="close()" aria-label="Close">
+            <img ngSrc="/assets/icons/icon-close-modal.svg" width="20" height="20" alt="" />
+          </button>
+        </div>
+        <p class="modal__description">
+          Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever.
+        </p>
+        <div class="modal__actions">
+          @if (auth.isDemo()) {
+            <p class="demo-notice">Demo account is view-only. <a routerLink="/signup" (click)="close()">Create a free account</a> to manage your finances.</p>
+          }
+          <button class="btn btn--danger btn--full" (click)="doDelete()" [disabled]="auth.isDemo()">Yes, Confirm Deletion</button>
+          <button class="btn btn--secondary btn--full" (click)="close()">No, Go Back</button>
+        </div>
+      </div>
+    </div>
+  }
+}
