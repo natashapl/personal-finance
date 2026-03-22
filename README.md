@@ -67,7 +67,6 @@ Users should be able to:
 - `rack-cors` for cross-origin requests
 - Per-user data scoping — all budgets, pots, and transactions belong to a user
 - Demo account with read-only enforcement (`is_demo` flag + `require_non_demo!` guard)
-- New user accounts receive a full copy of the demo seed data on signup
 
 **Testing**
 - [Playwright](https://playwright.dev/) for end-to-end testing — 25 tests, all passing
@@ -104,9 +103,6 @@ Two recurring issues when writing the E2E suite:
 
 **Multi-toast assertions in Playwright**
 When two success toasts are visible simultaneously, `expect(locator).toContainText('x')` requires _all_ matched elements to contain the text — so a "Budget added" toast would cause the assertion for "Budget updated" to fail. Fix: `.filter({ hasText: '...' }).toBeVisible()` to scope to the specific toast.
-
-**Rails per-user data seeding**
-Rather than a global seed file, copying the demo dataset for every new signup (`seed_demo_data_for(user)` in the auth controller) means new users immediately see a populated, realistic app rather than empty screens.
 
 ### AI Collaboration
 
