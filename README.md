@@ -38,7 +38,7 @@ Users should be able to:
 
 ### Screenshot
 
-![](./preview.jpg)
+![](./preview.webp)
 
 ### Links
 
