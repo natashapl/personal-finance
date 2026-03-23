@@ -5,11 +5,11 @@
 >
   <!-- Logo -->
   <div class="sidebar__logo">
-    <a routerLink="/" class="sidebar__link">
+    <a routerLink="/" class="sidebar__link" aria-label="Finance home">
       @if (minimized()) {
-        <img ngSrc="/assets/icons/logo-small.svg" width="14" height="22" alt="finance" priority />
+        <img ngSrc="/assets/icons/logo-small.svg" width="14" height="22" alt="" aria-hidden="true" priority />
       } @else {
-        <img ngSrc="/assets/icons/logo-large.svg" width="122" height="22" alt="finance" priority />
+        <img ngSrc="/assets/icons/logo-large.svg" width="122" height="22" alt="" aria-hidden="true" priority />
       }
     </a>
   </div>
@@ -17,42 +17,42 @@
   <!-- Nav links -->
   <ul class="sidebar__links">
     <li>
-      <a routerLink="/overview" routerLinkActive="active" class="sidebar__link">
+      <a routerLink="/overview" routerLinkActive="active" class="sidebar__link" aria-label="Overview">
         <img ngSrc="/assets/icons/icon-nav-overview.svg" width="24" height="25" alt="" aria-hidden="true" />
         @if (!minimized()) {
-          <span>Overview</span>
+          <span aria-hidden="true">Overview</span>
         }
       </a>
     </li>
     <li>
-      <a routerLink="/transactions" routerLinkActive="active" class="sidebar__link">
+      <a routerLink="/transactions" routerLinkActive="active" class="sidebar__link" aria-label="Transactions">
         <img ngSrc="/assets/icons/icon-nav-transactions.svg" width="24" height="24" alt="" aria-hidden="true" />
         @if (!minimized()) {
-          <span>Transactions</span>
+          <span aria-hidden="true">Transactions</span>
         }
       </a>
     </li>
     <li>
-      <a routerLink="/budgets" routerLinkActive="active" class="sidebar__link">
+      <a routerLink="/budgets" routerLinkActive="active" class="sidebar__link" aria-label="Budgets">
         <img ngSrc="/assets/icons/icon-nav-budgets.svg" width="24" height="24" alt="" aria-hidden="true" />
         @if (!minimized()) {
-          <span>Budgets</span>
+          <span aria-hidden="true">Budgets</span>
         }
       </a>
     </li>
     <li>
-      <a routerLink="/pots" routerLinkActive="active" class="sidebar__link">
+      <a routerLink="/pots" routerLinkActive="active" class="sidebar__link" aria-label="Pots">
         <img ngSrc="/assets/icons/icon-nav-pots.svg" width="24" height="29" alt="" aria-hidden="true" />
         @if (!minimized()) {
-          <span>Pots</span>
+          <span aria-hidden="true">Pots</span>
         }
       </a>
     </li>
     <li>
-      <a routerLink="/recurring-bills" routerLinkActive="active" class="sidebar__link">
+      <a routerLink="/recurring-bills" routerLinkActive="active" class="sidebar__link" aria-label="Recurring Bills">
         <img ngSrc="/assets/icons/icon-nav-recurring-bills.svg" width="24" height="21" alt="" aria-hidden="true" />
         @if (!minimized()) {
-          <span>Recurring Bills</span>
+          <span aria-hidden="true">Recurring Bills</span>
         }
       </a>
     </li>
@@ -84,26 +84,38 @@
 
 <!-- Mobile bottom nav -->
 <nav class="mobile-nav" aria-label="Main mobile navigation">
-  <a routerLink="/overview" routerLinkActive="active" class="mobile-nav__link" aria-label="Overview">
-    <img ngSrc="/assets/icons/icon-nav-overview.svg" width="24" height="25" alt="" />
-    <span>Overview</span>
-  </a>
-  <a routerLink="/transactions" routerLinkActive="active" class="mobile-nav__link" aria-label="Transactions">
-    <img ngSrc="/assets/icons/icon-nav-transactions.svg" width="24" height="24" alt="" />
-    <span>Transactions</span>
-  </a>
-  <a routerLink="/budgets" routerLinkActive="active" class="mobile-nav__link" aria-label="Budgets">
-    <img ngSrc="/assets/icons/icon-nav-budgets.svg" width="24" height="24" alt="" />
-    <span>Budgets</span>
-  </a>
-  <a routerLink="/pots" routerLinkActive="active" class="mobile-nav__link" aria-label="Pots">
-    <img ngSrc="/assets/icons/icon-nav-pots.svg" width="24" height="29" alt="" />
-    <span>Pots</span>
-  </a>
-  <a routerLink="/recurring-bills" routerLinkActive="active" class="mobile-nav__link" aria-label="Recurring Bills">
-    <img ngSrc="/assets/icons/icon-nav-recurring-bills.svg" width="24" height="21" alt="" />
-    <span>Recurring Bills</span>
-  </a>
+  <ul class="mobile-nav__list">
+    <li>
+      <a routerLink="/overview" routerLinkActive="active" class="mobile-nav__link" aria-label="Overview">
+        <img ngSrc="/assets/icons/icon-nav-overview.svg" width="24" height="25" alt="" />
+        <span>Overview</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/transactions" routerLinkActive="active" class="mobile-nav__link" aria-label="Transactions">
+        <img ngSrc="/assets/icons/icon-nav-transactions.svg" width="24" height="24" alt="" />
+        <span>Transactions</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/budgets" routerLinkActive="active" class="mobile-nav__link" aria-label="Budgets">
+        <img ngSrc="/assets/icons/icon-nav-budgets.svg" width="24" height="24" alt="" />
+        <span>Budgets</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/pots" routerLinkActive="active" class="mobile-nav__link" aria-label="Pots">
+        <img ngSrc="/assets/icons/icon-nav-pots.svg" width="24" height="29" alt="" />
+        <span>Pots</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/recurring-bills" routerLinkActive="active" class="mobile-nav__link" aria-label="Recurring Bills">
+        <img ngSrc="/assets/icons/icon-nav-recurring-bills.svg" width="24" height="21" alt="" />
+        <span>Recurring Bills</span>
+      </a>
+    </li>
+  </ul>
   <button type="button" class="sidebar__minimize" (click)="logout()" aria-label="Sign out">
     <span>Sign Out</span>
   </button>

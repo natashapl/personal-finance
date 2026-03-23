@@ -435,6 +435,23 @@ h3 { font-size: 1rem; font-weight: 700; }
   font-size: 0.875rem;
 }
 
+// ─── Skip link ───────────────────────────────────────────────────────────────
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  padding: 12px 24px;
+  background: var(--color-green);
+  color: var(--color-white);
+  font-weight: 700;
+  z-index: 9999;
+  text-decoration: none;
+
+  &:focus {
+    top: 0;
+  }
+}
+
 // ─── Focus ───────────────────────────────────────────────────────────────────
 :focus-visible {
   outline: 2px solid var(--color-green);
