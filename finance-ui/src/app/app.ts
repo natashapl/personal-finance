@@ -13,6 +13,7 @@ const AUTH_ROUTES = ['/login', '/signup'];
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet, Nav, Toast],
   template: `
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     @if (showNav()) {
       <div class="app-layout">
         <app-nav />

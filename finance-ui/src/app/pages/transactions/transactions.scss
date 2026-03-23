@@ -179,7 +179,7 @@
 
 .txn-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 32px;
+  grid-template-columns: 2fr 1fr 1fr 1fr 40px;
   gap: 16px;
   align-items: center;
   padding: 16px;
@@ -251,7 +251,7 @@
 
 // ─── Ellipsis dropdown ───────────────────────────────────────────────────────
 .ellipsis-btn {
-  padding: 8px;
+  padding: 18px 14px;
   border-radius: 50%;
   transition: background 0.15s;
 
