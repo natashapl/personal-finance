@@ -152,6 +152,11 @@
     outline-offset: 2px;
     border-radius: 4px;
   }
+
+  @media (max-width: 768px) {
+    width: auto;
+    padding: 5px;
+  }
 }
 
 // Mobile bottom nav
