@@ -1,7 +1,7 @@
 <nav
   class="sidebar"
   [class.sidebar--minimized]="minimized()"
-  aria-label="Main navigation"
+  aria-label="Desktop navigation"
 >
   <!-- Logo -->
   <div class="sidebar__logo">
@@ -15,7 +15,7 @@
   </div>
 
   <!-- Nav links -->
-  <ul class="sidebar__links" role="list">
+  <ul class="sidebar__links">
     <li>
       <a routerLink="/overview" routerLinkActive="active" class="sidebar__link">
         <img ngSrc="/assets/icons/icon-nav-overview.svg" width="24" height="25" alt="" aria-hidden="true" />
@@ -61,12 +61,13 @@
   <!-- Bottom actions -->
   <div class="sidebar__bottom">
     @if (!minimized()) {
-      <button class="sidebar__minimize" (click)="logout()" aria-label="Sign out">
+      <button type="button" class="sidebar__minimize" (click)="logout()" aria-label="Sign out">
         <span>Sign Out</span>
       </button>
     }
 
     <button
+      type="button"
       class="sidebar__minimize"
       (click)="toggleMinimize()"
       [attr.aria-label]="minimized() ? 'Expand menu' : 'Minimize menu'"
@@ -82,7 +83,7 @@
 </nav>
 
 <!-- Mobile bottom nav -->
-<nav class="mobile-nav" aria-label="Main navigation">
+<nav class="mobile-nav" aria-label="Main mobile navigation">
   <a routerLink="/overview" routerLinkActive="active" class="mobile-nav__link" aria-label="Overview">
     <img ngSrc="/assets/icons/icon-nav-overview.svg" width="24" height="25" alt="" />
     <span>Overview</span>
@@ -103,7 +104,7 @@
     <img ngSrc="/assets/icons/icon-nav-recurring-bills.svg" width="24" height="21" alt="" />
     <span>Recurring Bills</span>
   </a>
-  <button class="sidebar__minimize" (click)="logout()" aria-label="Sign out">
+  <button type="button" class="sidebar__minimize" (click)="logout()" aria-label="Sign out">
     <span>Sign Out</span>
   </button>
 </nav>

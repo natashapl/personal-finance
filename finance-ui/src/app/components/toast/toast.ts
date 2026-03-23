@@ -17,6 +17,7 @@ import { ToastService } from '../../core/services/toast.service';
           <span class="toast__message">{{ toast.message }}</span>
           <button
             class="toast__close"
+            type="button"
             (click)="toastSvc.dismiss(toast.id)"
             aria-label="Dismiss notification"
           >✕</button>

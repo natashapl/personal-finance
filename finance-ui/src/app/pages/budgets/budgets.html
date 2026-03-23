@@ -1,7 +1,7 @@
 <div class="budgets" [attr.aria-busy]="loading()">
   <div class="page-header">
     <h1>Budgets</h1>
-    <button class="btn btn--primary" (click)="openAdd()">
+    <button type="button" class="btn btn--primary" (click)="openAdd()">
       + Add New Budget
     </button>
   </div>
@@ -59,6 +59,7 @@
               </div>
               <div class="budget-card__menu-wrapper">
                 <button
+                  type="button"
                   class="btn-icon ellipsis-btn"
                   (click)="toggleMenu(b.id)"
                   [attr.aria-expanded]="activeMenuId() === b.id"
@@ -68,9 +69,9 @@
                 </button>
                 @if (activeMenuId() === b.id) {
                   <div class="dropdown-menu" role="menu">
-                    <button class="dropdown-menu__item" role="menuitem" (click)="openEdit(b)">Edit Budget</button>
+                    <button type="button" class="dropdown-menu__item" role="menuitem" (click)="openEdit(b)">Edit Budget</button>
                     <hr class="divider" />
-                    <button class="dropdown-menu__item dropdown-menu__item--danger" role="menuitem" (click)="confirmDelete(b.id)">Delete Budget</button>
+                    <button type="button" class="dropdown-menu__item dropdown-menu__item--danger" role="menuitem" (click)="confirmDelete(b.id)">Delete Budget</button>
                   </div>
                 }
               </div>

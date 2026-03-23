@@ -84,13 +84,19 @@
     img { filter: brightness(5); }
   }
 
+  &:focus-visible {
+    outline: 2px solid var(--color-green);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
   &.active {
     background: var(--color-beige-100);
     color: var(--color-grey-900);
     border-left-color: var(--color-green);
 
-    img { 
-      filter: brightness(0) saturate(100%) invert(40%) sepia(13%) saturate(2031%) hue-rotate(128deg) brightness(97%) contrast(86%); 
+    img {
+      filter: brightness(0) saturate(100%) invert(40%) sepia(13%) saturate(2031%) hue-rotate(128deg) brightness(97%) contrast(86%);
     }
   }
 }
@@ -200,6 +206,12 @@
     span {
       display: none;
     }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-green);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 
   &.active {
