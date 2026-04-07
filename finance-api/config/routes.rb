@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get "up", to: proc { [200, {}, ["ok"]] }
+  get "health", to: proc { ActiveRecord::Base.connection.execute("SELECT 1"); [200, {}, ["ok"]] }
 
   namespace :api do
     # Auth
