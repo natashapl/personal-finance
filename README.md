@@ -70,7 +70,9 @@ Users should be able to:
 
 **Testing**
 - [Playwright](https://playwright.dev/) for end-to-end testing — 25 tests, all passing
-- Tests cover: auth flows, budgets CRUD, pots CRUD (including add/withdraw money), transactions CRUD, search/filter, and pagination
+- E2E tests cover: auth flows, budgets CRUD, pots CRUD (including add/withdraw money), transactions CRUD, search/filter, and pagination
+- [Vitest](https://vitest.dev/) for unit testing — 80 tests, all passing
+- Unit tests cover: `parseServerErrors` utility (all error formats), `ToastService` (show/dismiss/auto-dismiss/announce), `RecurringBills` (ordinal formatting, currency formatting, computed totals), `Transactions` (pagination window logic, form validation, date formatting), `Pots` (progress calculations, withdrawal validation, form validation)
 
 **Quality**
 - Lighthouse scores (desktop): 100 Accessibility · 100 Best Practices · 100 SEO · 100 Performance
@@ -112,6 +114,7 @@ This project was built in collaboration with [Claude](https://claude.ai/) (Anthr
 - Scaffolding the Rails API (models, controllers, auth, routing, CORS) and the Angular application structure from scratch
 - Designing and implementing the accessibility layer (focus trap directive, ARIA attributes, live regions)
 - Writing the full Playwright E2E test suite and iteratively debugging failures
+- Writing the Vitest unit test suite covering pure utility functions, service state management, and component logic
 
 **What worked well:**
 Claude was effective at diagnosing issues as they came up, especially Playwright failures. Claude was also efficient at following instructions and requirements.
