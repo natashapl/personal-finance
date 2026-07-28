@@ -1,0 +1,63 @@
+# Vercel Web Analytics Integration
+
+Successfully configured Vercel Web Analytics for this Angular 21 application.
+
+## Changes Made
+
+### Modified Files
+
+**src/main.ts**
+- Removed incorrect import: `import { Analytics } from "@vercel/analytics/next"` (This was Next.js specific)
+- Added correct import: `import { inject } from '@vercel/analytics'`
+- Added Analytics initialization call: `inject()` before bootstrapping the Angular application
+- Applied Prettier formatting to maintain code style consistency
+
+## Implementation Details
+
+### Research & Documentation
+- Fetched the latest Vercel Analytics documentation from the official sources
+- Confirmed that Angular is not explicitly documented in the Vercel Analytics quickstart guide
+- Identified that the framework-agnostic `inject()` function from `@vercel/analytics` is the correct approach for Angular applications
+- Reviewed the package TypeScript definitions to understand the proper usage
+
+### Package Information
+- Package: `@vercel/analytics` version 2.0.1 (already in package.json)
+- The package was already listed as a dependency but incorrectly configured
+- Used the vanilla/framework-agnostic approach with the `inject()` function
+
+### Why This Approach
+1. **Framework-Agnostic**: The `inject()` function is designed for frameworks without specific integration
+2. **Automatic Tracking**: The inject function automatically tracks page views via pushState events
+3. **Production-Safe**: By default, analytics only track in production mode (not in development)
+4. **Early Initialization**: Placed before Angular bootstrapping ensures analytics is ready when the app starts
+
+## Testing
+
+✅ Build verification: `npm run build` - Successful
+✅ Code formatting: Applied Prettier formatting to maintain project standards
+✅ No new dependencies required - @vercel/analytics was already in package.json
+
+## How It Works
+
+The `inject()` function:
+1. Injects the Vercel Web Analytics script into the page head
+2. Automatically tracks page views when routes change
+3. Respects environment detection (development vs production)
+4. Only sends data in production environments
+
+## Next Steps for Deployment
+
+To activate analytics tracking:
+1. Deploy the application to Vercel: `vercel deploy`
+2. Enable Web Analytics in the Vercel dashboard for this project
+3. Analytics will automatically start tracking once deployed to production
+
+## Configuration Options
+
+The `inject()` function supports optional configuration:
+- `mode`: Override environment detection ('auto' | 'development' | 'production')
+- `debug`: Enable debug logging in development
+- `beforeSend`: Middleware to modify events before sending
+- And other advanced options as documented in the TypeScript definitions
+
+For this implementation, we used the default configuration which auto-detects the environment.
