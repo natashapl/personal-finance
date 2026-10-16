@@ -43,7 +43,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: [https://github.com/natashapl/personal-finance](https://github.com/natashapl/personal-finance)
-- Live Site URL: [https://personal-finance-natashasworld.vercel.app](https://personal-finance-natashasworld.vercel.app)
+- Live Site URL: [https://finance.natashasworld.com](https://finance.natashasworld.com)
 
 ## My process
 

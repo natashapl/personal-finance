@@ -2,7 +2,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins "http://localhost:4200",                           # Angular dev server
             "http://localhost:4201",                           # Angular production preview
-            "https://personal-finance-natashasworld.vercel.app" # Production
+            "https://finance.natashasworld.com" # Production
 
     resource "*",
       headers: :any,
