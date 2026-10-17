@@ -4,19 +4,45 @@ Ruby on Rails 8.1 API backend for the Personal Finance app.
 
 ## Requirements
 
-- Ruby 3.4+
-- Bundler
+- Ruby 3.4.9 (see `.ruby-version`)
+- Bundler 2.6+
+
+On Windows, use a Ruby+Devkit installation. Verify the tools in a new PowerShell window:
+
+```powershell
+ruby --version
+bundle --version
+```
 
 ## Setup
 
-```bash
+Windows PowerShell:
+
+```powershell
 bundle install
-bin/rails db:create db:migrate db:seed
+ruby bin/rails db:prepare
+ruby bin/rails db:seed
 ```
 
-`db:seed` loads the demo account and its transactions, budgets, pots, and recurring bills.
+macOS/Linux:
+
+```bash
+bundle install
+bin/rails db:prepare
+bin/rails db:seed
+```
+
+Run these commands inside the `finance-api` directory. `db:prepare` creates the SQLite development database when needed and applies pending migrations. `db:seed` loads the demo account and its transactions, budgets, pots, and recurring bills; it is safe to rerun.
 
 ## Running the server
+
+Windows PowerShell:
+
+```powershell
+ruby bin/rails server
+```
+
+macOS/Linux:
 
 ```bash
 bin/rails server
@@ -24,18 +50,34 @@ bin/rails server
 
 Runs on `http://localhost:3000` by default.
 
+Visit `http://localhost:3000/health` and confirm it displays `ok`, then leave this terminal running while using the frontend. Stop the server with `Ctrl+C`.
+
+On Windows, do not enter `bin/rails` directly in PowerShell. PowerShell may report `Access is denied` or ask which application should open the file. Prefix Rails commands with `ruby`, as shown above.
+
 ## Environment variables
 
 | Variable | Description |
 |----------|-------------|
 | `DATABASE_URL` | PostgreSQL connection string (production only) |
-| `RAILS_MASTER_KEY` | Decrypts `config/credentials.yml.enc` (production only) |
+| `RAILS_MASTER_KEY` | Decrypts `config/credentials.yml.enc` in production |
 
-In development the app uses SQLite and reads `config/master.key` from disk.
+Local development uses SQLite and does not require `DATABASE_URL`. The repository's ignored `config/master.key` is not required for the documented local workflow.
 
 ## Running tests
 
 There are no Rails unit tests. All API behaviour is covered by the Playwright E2E suite in `finance-ui/e2e/`.
+
+You can still verify that Rails boots and the database is current:
+
+```powershell
+ruby bin/rails db:migrate:status
+```
+
+On macOS/Linux, omit the leading `ruby`.
+
+## Windows notes
+
+Ruby may print warnings about optional `vips-heif`, `vips-jxl`, `vips-magick`, `vips-openslide`, or `vips-poppler` modules. They do not prevent this application from booting and can be ignored for normal local development.
 
 ## API endpoints
 

@@ -8,6 +8,7 @@ This is a solution to the [Personal finance app challenge on Frontend Mentor](ht
   - [The challenge](#the-challenge)
   - [Screenshot](#screenshot)
   - [Links](#links)
+- [Run locally](#run-locally)
 - [My process](#my-process)
   - [Built with](#built-with)
   - [What I learned](#what-i-learned)
@@ -44,6 +45,97 @@ Users should be able to:
 
 - Solution URL: [https://github.com/natashapl/personal-finance](https://github.com/natashapl/personal-finance)
 - Live Site URL: [https://finance.natashasworld.com](https://finance.natashasworld.com)
+
+## Run locally
+
+This repository contains two applications that must run at the same time:
+
+- `finance-api`: Rails API at `http://localhost:3000`
+- `finance-ui`: Angular app at `http://localhost:4200`
+
+### Prerequisites
+
+- Ruby 3.4.9 (the exact version is recorded in `finance-api/.ruby-version`)
+- Bundler 2.6 or newer
+- Node.js 22.14 or newer
+- npm 11 or newer
+
+On Windows, install the Ruby+Devkit build from RubyInstaller. After installing the prerequisites, confirm that a new PowerShell window can find them:
+
+```powershell
+ruby --version
+bundle --version
+node --version
+npm --version
+```
+
+### First-time setup
+
+Run these commands from the repository root.
+
+PowerShell (Windows):
+
+```powershell
+cd finance-api
+bundle install
+ruby bin/rails db:prepare
+ruby bin/rails db:seed
+
+cd ../finance-ui
+npm ci
+```
+
+macOS/Linux:
+
+```bash
+cd finance-api
+bundle install
+bin/rails db:prepare
+bin/rails db:seed
+
+cd ../finance-ui
+npm ci
+```
+
+The seed is safe to rerun. It creates the read-only demo account only when it does not already exist.
+
+### Start the app
+
+Open two terminals at the repository root and leave both commands running.
+
+Terminal 1 — API (PowerShell):
+
+```powershell
+cd finance-api
+ruby bin/rails server
+```
+
+Terminal 1 — API (macOS/Linux):
+
+```bash
+cd finance-api
+bin/rails server
+```
+
+Terminal 2 — frontend (all platforms):
+
+```shell
+cd finance-ui
+npm start
+```
+
+Open `http://localhost:4200/` and either create an account or choose the demo login. To confirm the API is running, open `http://localhost:3000/health`; it should display `ok`. Stop either server with `Ctrl+C` in its terminal.
+
+### Common setup problems
+
+- **PowerShell reports `bin/rails` is denied or asks how to open it:** use `ruby bin/rails ...` on Windows. The extensionless `bin/rails` executable is intended for Unix-like shells.
+- **`ruby` or `node` is not recognized:** close and reopen the terminal after installation, then rerun the version checks above.
+- **Rails reports pending migrations:** from `finance-api`, run `ruby bin/rails db:prepare` on Windows or `bin/rails db:prepare` on macOS/Linux.
+- **The frontend cannot load data:** make sure Rails is still running on port 3000 before starting or refreshing the frontend.
+- **Port 3000 or 4200 is already in use:** stop the older Rails/Angular process with `Ctrl+C` before starting another copy. The frontend is configured specifically for the API on port 3000.
+- **Windows prints optional libvips module warnings:** warnings about `vips-heif`, `vips-jxl`, `vips-magick`, `vips-openslide`, or `vips-poppler` do not prevent this app from starting.
+
+See [`finance-api/README.md`](finance-api/README.md) and [`finance-ui/README.md`](finance-ui/README.md) for component-specific commands and tests.
 
 ## My process
 

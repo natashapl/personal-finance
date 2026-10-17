@@ -4,57 +4,61 @@ Angular 21 frontend for the Personal Finance app.
 
 ## Requirements
 
-- Node.js 20+
-- Angular CLI: `npm install -g @angular/cli`
+- Node.js 22.14+
+- npm 11+
+
+Angular CLI is installed in this project's development dependencies. A global Angular CLI installation is not required.
 
 ## Setup
 
-```bash
-npm install
+Run inside the `finance-ui` directory:
+
+```shell
+npm ci
 ```
 
 ## Development server
 
-```bash
-ng serve
+```shell
+npm start
 ```
 
 Open `http://localhost:4200/`. The app reloads automatically on file changes.
 
-The dev server proxies API requests to `http://localhost:3000` (Rails). Start the Rails API before running the frontend locally.
+The development environment sends API requests directly to `http://localhost:3000/api`. Start the Rails API before running the frontend locally. See [`../finance-api/README.md`](../finance-api/README.md) for the platform-specific Rails commands.
 
 ## Running unit tests
 
-```bash
-ng test
+```shell
+npm test
 ```
 
-Runs 80 Vitest unit tests covering utility functions, services, and component logic. Add `--watch=false` to run once without watch mode.
+Runs 80 Vitest unit tests covering utility functions, services, and component logic.
 
 ## Running end-to-end tests
 
-```bash
-npx playwright test
+```shell
+npm run test:e2e
 ```
 
 Runs 25 Playwright E2E tests against a live Rails API + database. The tests sign up fresh user accounts on each run, so the API must be running locally before executing the suite.
 
 To run with the Playwright UI:
 
-```bash
-npx playwright test --ui
+```shell
+npm run test:e2e:ui
 ```
 
 ## Building for production
 
-```bash
-ng build
+```shell
+npm run build
 ```
 
 Output goes to `dist/`. The production build swaps `environment.ts` for `environment.prod.ts`, pointing the API URL at the Render deployment.
 
 ## Code scaffolding
 
-```bash
-ng generate component component-name
+```shell
+npm exec ng generate component component-name
 ```
